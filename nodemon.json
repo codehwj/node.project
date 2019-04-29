@@ -1,0 +1,23 @@
+{
+  "restartable": "rs",
+  "ignore": [
+    ".git",
+    ".svn",
+    "node_modules/**/node_modules"
+  ],
+  "verbose": true,
+  "execMap": {
+    "": "node",
+    "js": "node --server"
+  },
+  "watch": [
+    "app/",
+    "config/"
+  ],
+  "env": {
+    "NODE_ENV": "development",
+    "PORT": "3000"
+  },
+  "ext": "js json",
+  "legacy-watch": false
+}
