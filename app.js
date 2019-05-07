@@ -3,15 +3,14 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+import db from './app/mongodb';
 
-var indexRouter = require('./app/api/v1/home');
-var usersRouter = require('./app/api/v1/users');
-var API_V1 = require('./app/api/index');
+var router = require('./app/api/index');
 
 var app = express();
 
 // view engine setup
-// app.set('views', path.join(__dirname, 'app/views'));
+app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'pug');
 
 app.use(logger('dev'));
@@ -20,9 +19,16 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use('/', indexRouter);
-// app.use('/users', usersRouter);
-API_V1(app)
+// 发布api
+router(app);
+
+// 日志
+require('./app/common/log4js')(app);
+
+// 抵御一些比较常见的安全web安全隐患
+// https://cnodejs.org/topic/56f3b0e8dd3dade17726fe85
+var helmet = require('helmet');
+app.use(helmet());
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
